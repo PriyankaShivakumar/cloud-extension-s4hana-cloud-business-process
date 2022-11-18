@@ -1,6 +1,6 @@
 ---
 applications:
-- name: geo
+- name: geoe2e
   path: georel
   memory: 128M
   env:

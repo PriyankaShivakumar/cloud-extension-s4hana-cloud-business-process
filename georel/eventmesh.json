@@ -1,0 +1,29 @@
+{
+    "emname": "EMGeo",
+    "namespace": "sap/georelations/1",
+    "version": "1.1.0",
+    "options": {
+        "management": true,
+        "messagingrest": true,
+        "messaging": true
+    },
+    "rules": {
+        "queueRules": {
+            "publishFilter": [
+                "${namespace}/*"
+            ],
+            "subscribeFilter": [
+                "${namespace}/*", "sap/S4HANAOD/1011/*"
+            ]
+        },
+        "topicRules": {
+            "publishFilter": [
+                "${namespace}/*"
+            ],
+            "subscribeFilter": [
+                "${namespace}/*", "sap/S4HANAOD/1011/*"
+            ]
+        }
+
+    }
+}

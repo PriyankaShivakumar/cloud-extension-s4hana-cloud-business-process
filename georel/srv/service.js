@@ -2,6 +2,8 @@
 
 cds = require('@sap/cds')
 
+const topicns = require('./topic.json')
+
 //const uuidv4 = require('uuid/v4');
 const { v4: uuidv4 } = require('uuid');
 const { BusinessPartner, BusinessPartnerRole, BusinessPartnerAddress, AddressPhoneNumber, AddressEmailAddress } = require('@sap/cloud-sdk-vdm-business-partner-service')
@@ -9,7 +11,7 @@ const { BusinessPartner, BusinessPartnerRole, BusinessPartnerAddress, AddressPho
 const RELEVANT_COUNTRY = process.env.RELEVANT_COUNTRY || 'US'
 const RELEVANT_ROLE = 'FLCU01'
 
-const NAMESPACE = 'sap/S4HANAOD/1908'
+const NAMESPACE = topicns.namespace
 const CREATED = 'ce/sap/s4/beh/businesspartner/v1/BusinessPartner/Created/v1'
 const CHANGED = 'ce/sap/s4/beh/businesspartner/v1/BusinessPartner/Changed/v1'
 
