@@ -344,7 +344,7 @@ pipeline {
                     }
                 }
                 cleanWs()
-                emailext body: '$DEFAULT_CONTENT', subject: '$DEFAULT_SUBJECT', to: 'priyanka.r.s@sap.com, mamatha.k.h@sap.com'   
+                emailext body: '$DEFAULT_CONTENT', subject: '$DEFAULT_SUBJECT', to: 'priyanka.r.s@sap.com'   
             }
         }
     }
