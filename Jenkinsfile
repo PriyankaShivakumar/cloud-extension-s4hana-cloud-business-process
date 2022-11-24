@@ -191,8 +191,8 @@ pipeline {
 
                             eventmeshJson = readJSON file: 'eventmesh.json'
                             topicnamespace = "sap/S4HANAOD/" + "${topicid}" + "/*"
-			    eventmeshJson.rules.queueRules.subscribeFilter[0] = topicnamespace + "," + '${namespace}/*'
-                            eventmeshJson.rules.topicRules.subscribeFilter[0] = topicnamespace + "," + '${namespace}/*'
+			    eventmeshJson.rules.queueRules.subscribeFilter[0] = topicnamespace + "\", \"" + '${namespace}/*'
+                            eventmeshJson.rules.topicRules.subscribeFilter[0] = topicnamespace + "\", \"" + '${namespace}/*'
                             writeJSON file: 'eventmesh.json', json: eventmeshJson
                             sh "cat eventmesh.json"
 
