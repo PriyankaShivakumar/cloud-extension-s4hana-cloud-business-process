@@ -289,17 +289,7 @@ pipeline {
                 script {
                     dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, 'puserpwd':puserpwd], dockerImage: 'docker.wdf.sap.corp:51010/sfext:v3' ){
                         withCredentials([usernamePassword(credentialsId: params.credentialsId, passwordVariable: 'password', usernameVariable: 'username')]) {
-                            sh "cf login -a $apiEndpoint -u $username -p $password -o $cfOrgName -s $cfSpaceName" 
-			    //Remove
-			    checkout scm
-                            topicid = "7895"
-			    systemName = "GeoSystem465"
-			    
-			    sh '''
-			    curl -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 --output jq
-                                chmod +x jq
-                                mv jq /usr/local/bin/jq
-			    '''
+                            sh "cf login -a $apiEndpoint -u $username -p $password -o $cfOrgName -s $cfSpaceName"  
                             sh '''
                                 appId=`cf app geoe2e --guid`
                                 `cf curl /v2/apps/$appId/env > ab.txt`
