@@ -13,7 +13,7 @@
                 "${namespace}/*"
             ],
             "subscribeFilter": [
-                "${namespace}/*", "sap/S4HANAOD/1011/*"
+                "${namespace}/*"
             ]
         },
         "topicRules": {
@@ -21,7 +21,7 @@
                 "${namespace}/*"
             ],
             "subscribeFilter": [
-                "${namespace}/*", "sap/S4HANAOD/1011/*"
+                "${namespace}/*"
             ]
         }
 
