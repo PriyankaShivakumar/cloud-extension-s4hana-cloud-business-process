@@ -160,7 +160,7 @@ pipeline {
 		            systemName= properties['SystemName']
 		            print systemName
 
-                            topicid = Math.abs(new Random().nextInt(9000))+1000
+                            topicid = (Math.abs(new Random().nextInt(9000))+1000).toString()
                             print topicid
 
                             checkout scm
@@ -191,8 +191,8 @@ pipeline {
 
                             eventmeshJson = readJSON file: 'eventmesh.json'
                             topicnamespace = "sap/S4HANAOD/" + "${topicid}" + "/*"
-			    eventmeshJson.rules.queueRules.subscribeFilter[0] = topicnamespace
-                            eventmeshJson.rules.topicRules.subscribeFilter[0] = topicnamespace
+			    eventmeshJson.rules.queueRules.subscribeFilter[0] = topicnamespace + "," + '${namespace}/*'
+                            eventmeshJson.rules.topicRules.subscribeFilter[0] = topicnamespace + "," + '${namespace}/*'
                             writeJSON file: 'eventmesh.json', json: eventmeshJson
                             sh "cat eventmesh.json"
 
