@@ -318,7 +318,7 @@ pipeline {
             script {
                 if (params.deleteSubaccount == true) {
                     try {
-                        retry (15) {
+                        retry (10) {
                             cloudFoundryDeleteSpace(
                                 cfApiEndpoint: params.apiEndpoint,
                                 cfOrg: params.cfOrgName,
