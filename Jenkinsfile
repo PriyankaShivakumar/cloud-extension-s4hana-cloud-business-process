@@ -13,7 +13,7 @@ pipeline {
         string(name: 'btpSubdomainName', defaultValue: 'GeoAuto',
             description: 'BTP subdomain name of the subaccount')
 
-        string(name: 'displayNameInBTP', defaultValue: 'GeoRel-Automation',
+        string(name: 'displayNameInBTP', defaultValue: 'GeoRelAutomation',
             description: 'BTP subaccount display name')
 
         string(name: 'btpRegion', defaultValue: 'eu10',
