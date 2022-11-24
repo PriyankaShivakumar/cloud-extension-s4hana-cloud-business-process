@@ -40,7 +40,7 @@ pipeline {
         string(name: 'hanaCloudTenantusername', defaultValue: 'priyanka.r.s@sap.com',
             description: 'Hana Cloud Tenant Username')
         
-        string(name: 'hanaCloudTenantPassword',
+        string(name: 'hanaCloudTenantPassword', defaultValue: 'Welcome@20',
             description: 'Hana Cloud Tenant Password')
 
         string(name: 'cockpitURL', defaultValue: 'https://cockpit.eu10.hana.ondemand.com/cockpit/#/globalaccount/93951304-9109-44bc-ac3f-53c3ac8b309b/accountModel',
