@@ -160,7 +160,7 @@ pipeline {
 		            systemName= properties['SystemName']
 		            print systemName
 
-                            topicid = $(((RANDOM) % 9999))
+                            topicid = Math.abs(new Random().nextInt() % 9999)
                             print topicid
 
                             checkout scm
@@ -183,13 +183,14 @@ pipeline {
                             cat georel/georelmessaging.json
 
                             apiaccessJson = readJSON file: 'georel/apiaccess.json'
-                            apiaccessJson.communicationArrangement.communicationArrangementName = "Comm_Arr_${topicid}"
+			    communication_arr = "Comm_Arr_${topicid}"
+                            apiaccessJson.communicationArrangement.communicationArrangementName = communication_arr
                             apiaccessJson.systemName = systemName
                             writeJSON file: 'georel/apiaccess.json', json: apiaccessJson
                             cat georel/apiaccess.json
 
                             eventmeshJson = readJSON file: 'georel/eventmesh.json'
-                            eventmeshJson.rules.queueRules.subscribeFilter[] = '"${namespace}/*", "sap/S4HANAOD/${topicid}/*"'
+			    eventmeshJson.rules.queueRules.subscribeFilter[] = '"${namespace}/*", "sap/S4HANAOD/${topicid}/*"'
                             eventmeshJson.rules.topicRules.subscribeFilter[] = '"${namespace}/*", "sap/S4HANAOD/${topicid}/*"'
                             writeJSON file: 'georel/eventmesh.json', json: eventmeshJson
                             cat georel/eventmesh.json
