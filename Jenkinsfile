@@ -176,24 +176,25 @@ pipeline {
 			        cd ..
                             '''
                             
-                            georelmessagingJson = readJSON file: 'georel/georelmessaging.json'
+                            georelmessagingJson = readJSON file: 'georelmessaging.json'
 			    georelmessagingJson.emClientId = topicid
                             georelmessagingJson.systemName = systemName
-                            writeJSON file: 'georel/georelmessaging.json', json: georelmessagingJson
-                            cat georel/georelmessaging.json
+                            writeJSON file: 'georelmessaging.json', json: georelmessagingJson
+                            cat georelmessaging.json
 
-                            apiaccessJson = readJSON file: 'georel/apiaccess.json'
+                            apiaccessJson = readJSON file: 'apiaccess.json'
 			    communication_arr = "Comm_Arr_${topicid}"
                             apiaccessJson.communicationArrangement.communicationArrangementName = communication_arr
                             apiaccessJson.systemName = systemName
-                            writeJSON file: 'georel/apiaccess.json', json: apiaccessJson
-                            cat georel/apiaccess.json
+                            writeJSON file: 'apiaccess.json', json: apiaccessJson
+                            cat apiaccess.json
 
-                            eventmeshJson = readJSON file: 'georel/eventmesh.json'
-			    eventmeshJson.rules.queueRules.subscribeFilter[] = '"${namespace}/*", "sap/S4HANAOD/${topicid}/*"'
-                            eventmeshJson.rules.topicRules.subscribeFilter[] = '"${namespace}/*", "sap/S4HANAOD/${topicid}/*"'
-                            writeJSON file: 'georel/eventmesh.json', json: eventmeshJson
-                            cat georel/eventmesh.json
+                            eventmeshJson = readJSON file: 'eventmesh.json'
+                            topicnamespace = '"${namespace}/*"' + ", " + "\"sap/S4HANAOD/${topicid}/*\""
+			    eventmeshJson.rules.queueRules.subscribeFilter[] = topicnamespace
+                            eventmeshJson.rules.topicRules.subscribeFilter[] = topicnamespace
+                            writeJSON file: 'eventmesh.json', json: eventmeshJson
+                            cat eventmesh.json
 
                             cloudFoundryCreateService(
                                 cfApiEndpoint: params.apiEndpoint,
@@ -203,7 +204,7 @@ pipeline {
                                 cfService: 's4-hana-cloud',
                                 cfServiceInstanceName: 'georelmessaging',
                                 cfServicePlan: 'messaging',
-                                cfCreateServiceConfig: 'georel/georelmessaging.json',
+                                cfCreateServiceConfig: 'georelmessaging.json',
                                 script: this
                             )
 
@@ -215,7 +216,7 @@ pipeline {
                                 cfService: 's4-hana-cloud',
                                 cfServiceInstanceName: 'xf_api_bupa',
                                 cfServicePlan: 'api-access',
-                                cfCreateServiceConfig: 'georel/apiaccess.json',
+                                cfCreateServiceConfig: 'apiaccess.json',
                                 script: this
                             )
 
@@ -227,7 +228,7 @@ pipeline {
                                 cfService: 'enterprise-messaging',
                                 cfServiceInstanceName: 'messaging_georel',
                                 cfServicePlan: 'default',
-                                cfCreateServiceConfig: 'georel/eventmesh.json',
+                                cfCreateServiceConfig: 'eventmesh.json',
                                 script: this
                             )
                             getServiceCreateStatus(
@@ -257,10 +258,10 @@ pipeline {
 
                             build job: 'Georel_AddOutboundTopic', parameters: [[$class: 'StringParameterValue', name: 'URL', value: cockpitURL],[$class: 'StringParameterValue', name: 'Username', value: username],[$class: 'StringParameterValue', name: 'Password', value: password],[$class: 'StringParameterValue', name: 'hanaCloudTenantURL', value: hanaCloudTenantURL],[$class: 'StringParameterValue', name: 'hanaCloudTenantusername', value: hanaCloudTenantusername],[$class: 'StringParameterValue', name: 'hanaCloudTenantPassword', value: hanaCloudTenantPassword],[$class: 'StringParameterValue', name: 'topicid', value: topicid]]
 
-                            topicJson = readJSON file: 'georel/srv/topic.json'
-                            topicJson.namespace = '"sap/S4HANAOD/${topicid}"'
-                            writeJSON file: 'georel/srv/topic.json', json: topicJson
-                            cat georel/srv/topic.json
+                            topicJson = readJSON file: 'topic.json'
+                            topicJson.namespace = "sap/S4HANAOD/${topicid}"
+                            writeJSON file: 'topic.json', json: topicJson
+                            cat topic.json
         
                             cloudFoundryDeploy(
                                 script: this,
