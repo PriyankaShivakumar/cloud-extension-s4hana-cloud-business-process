@@ -174,6 +174,9 @@ pipeline {
                                 npm install sqlite3
                                 cds deploy --to sqlite
 			        cd ..
+				curl -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 --output jq
+                                chmod +x jq
+                                mv jq /usr/local/bin/jq
                             '''
                             
                             georelmessagingJson = readJSON file: 'georelmessaging.json'
@@ -257,10 +260,8 @@ pipeline {
                             )
 
                             build job: 'Georel_AddOutboundTopic', parameters: [[$class: 'StringParameterValue', name: 'URL', value: cockpitURL],[$class: 'StringParameterValue', name: 'Username', value: username],[$class: 'StringParameterValue', name: 'Password', value: password],[$class: 'StringParameterValue', name: 'hanaCloudTenantURL', value: hanaCloudTenantURL],[$class: 'StringParameterValue', name: 'hanaCloudTenantusername', value: hanaCloudTenantusername],[$class: 'StringParameterValue', name: 'hanaCloudTenantPassword', value: hanaCloudTenantPassword],[$class: 'StringParameterValue', name: 'topicid', value: topicid]]
-                            */
-                            checkout scm
-                            topicid = "7895"
-                            topicJson = readJSON file: 'georel/srv/topic.json'
+                            
+			    topicJson = readJSON file: 'georel/srv/topic.json'
 			    ns = "sap/S4HANAOD/" + "${topicid}"
                             topicJson.namespace = ns
                             writeJSON file: 'georel/srv/topic.json', json: topicJson
@@ -275,6 +276,12 @@ pipeline {
                                 cfSpace: params.cfSpaceName,
                                 cloudFoundry: [manifest: 'manifest.yaml']
                             )
+			    */
+			    //Remove
+			    checkout scm
+                            topicid = "7895"
+			    systemName = "GeoSystem465"
+			    
                         }
                     }
                 }
@@ -289,6 +296,12 @@ pipeline {
                     dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, 'puserpwd':puserpwd], dockerImage: 'docker.wdf.sap.corp:51010/sfext:v3' ){
                         withCredentials([usernamePassword(credentialsId: params.credentialsId, passwordVariable: 'password', usernameVariable: 'username')]) {
                             sh "cf login -a $apiEndpoint -u $username -p $password -o $cfOrgName -s $cfSpaceName" 
+			    //Remove
+			    sh '''
+			    curl -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 --output jq
+                                chmod +x jq
+                                mv jq /usr/local/bin/jq
+			    '''
                             sh '''
                                 appId=`cf app geoe2e --guid`
                                 `cf curl /v2/apps/$appId/env > ab.txt`
