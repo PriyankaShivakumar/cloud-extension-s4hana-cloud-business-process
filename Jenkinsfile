@@ -327,6 +327,9 @@ pipeline {
                                 script: this
                             )
                         }
+	             } catch(e){
+                        echo 'Space Deletion Failed'
+                     }
                         deleteSubaccount(
                             btpCredentialsId: params.credentialsId,
                             btpGlobalAccountId: params.btpGlobalAccountId,
@@ -345,9 +348,6 @@ pipeline {
 
                         build job: 'Georel_RemoveSystem', parameters: [[$class: 'StringParameterValue', name: 'URL', value: cockpitURL],[$class: 'StringParameterValue', name: 'Username', value: username],[$class: 'StringParameterValue', name: 'Password', value: password],[$class: 'StringParameterValue', name: 'SystemName', value: systemName]]
 
-                    } catch(e){
-                        echo 'Cleanup failed'
-                    }
                 }
                 cleanWs()
                 emailext body: '$DEFAULT_CONTENT', subject: '$DEFAULT_SUBJECT', to: 'priyanka.r.s@sap.com'   
