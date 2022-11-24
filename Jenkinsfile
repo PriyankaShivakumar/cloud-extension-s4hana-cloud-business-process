@@ -152,7 +152,7 @@ pipeline {
                 script {
                     dockerExecuteOnKubernetes(script: this, dockerImage: 'docker.wdf.sap.corp:51010/sfext:v3' ){
                         withCredentials([usernamePassword(credentialsId: params.credentialsId, passwordVariable: 'password', usernameVariable: 'username')]) {
-                            /*
+               
                             build job: 'Georel_RegisterSystem', parameters: [[$class: 'StringParameterValue', name: 'URL', value: cockpitURL],[$class: 'StringParameterValue', name: 'Username', value: username],[$class: 'StringParameterValue', name: 'Password', value: password],[$class: 'StringParameterValue', name: 'hanaCloudTenantURL', value: hanaCloudTenantURL],[$class: 'StringParameterValue', name: 'hanaCloudTenantusername', value: hanaCloudTenantusername],[$class: 'StringParameterValue', name: 'hanaCloudTenantPassword', value: hanaCloudTenantPassword],[$class: 'StringParameterValue', name: 'subAccountName', value: displayNameInBTP]]
                             
                             git branch: 'us10',credentialsId: 'I559299_wdf',url: 'https://github.wdf.sap.corp/CentralAutomationTeam/CloudPortal.git'
@@ -276,12 +276,6 @@ pipeline {
                                 cfSpace: params.cfSpaceName,
                                 cloudFoundry: [manifest: 'manifest.yaml']
                             )
-			    */
-			    //Remove
-			    checkout scm
-                            topicid = "7895"
-			    systemName = "GeoSystem465"
-			    
                         }
                     }
                 }
@@ -297,8 +291,10 @@ pipeline {
                         withCredentials([usernamePassword(credentialsId: params.credentialsId, passwordVariable: 'password', usernameVariable: 'username')]) {
                             sh "cf login -a $apiEndpoint -u $username -p $password -o $cfOrgName -s $cfSpaceName" 
 			    //Remove
-			    print topicid
-			    print systemName
+			    checkout scm
+                            topicid = "7895"
+			    systemName = "GeoSystem465"
+			    
 			    sh '''
 			    curl -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 --output jq
                                 chmod +x jq
