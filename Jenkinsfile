@@ -297,6 +297,8 @@ pipeline {
                         withCredentials([usernamePassword(credentialsId: params.credentialsId, passwordVariable: 'password', usernameVariable: 'username')]) {
                             sh "cf login -a $apiEndpoint -u $username -p $password -o $cfOrgName -s $cfSpaceName" 
 			    //Remove
+			    print topicid
+			    print systemName
 			    sh '''
 			    curl -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 --output jq
                                 chmod +x jq
