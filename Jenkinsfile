@@ -152,7 +152,7 @@ pipeline {
                 script {
                     dockerExecuteOnKubernetes(script: this, dockerImage: 'docker.wdf.sap.corp:51010/sfext:v3' ){
                         withCredentials([usernamePassword(credentialsId: params.credentialsId, passwordVariable: 'password', usernameVariable: 'username')]) {
-                            /*
+                            
                             build job: 'Georel_RegisterSystem', parameters: [[$class: 'StringParameterValue', name: 'URL', value: cockpitURL],[$class: 'StringParameterValue', name: 'Username', value: username],[$class: 'StringParameterValue', name: 'Password', value: password],[$class: 'StringParameterValue', name: 'hanaCloudTenantURL', value: hanaCloudTenantURL],[$class: 'StringParameterValue', name: 'hanaCloudTenantusername', value: hanaCloudTenantusername],[$class: 'StringParameterValue', name: 'hanaCloudTenantPassword', value: hanaCloudTenantPassword],[$class: 'StringParameterValue', name: 'subAccountName', value: displayNameInBTP]]
                             
                             git branch: 'us10',credentialsId: 'I559299_wdf',url: 'https://github.wdf.sap.corp/CentralAutomationTeam/CloudPortal.git'
@@ -257,10 +257,7 @@ pipeline {
                             )
 
                             build job: 'Georel_AddOutboundTopic', parameters: [[$class: 'StringParameterValue', name: 'URL', value: cockpitURL],[$class: 'StringParameterValue', name: 'Username', value: username],[$class: 'StringParameterValue', name: 'Password', value: password],[$class: 'StringParameterValue', name: 'hanaCloudTenantURL', value: hanaCloudTenantURL],[$class: 'StringParameterValue', name: 'hanaCloudTenantusername', value: hanaCloudTenantusername],[$class: 'StringParameterValue', name: 'hanaCloudTenantPassword', value: hanaCloudTenantPassword],[$class: 'StringParameterValue', name: 'topicid', value: topicid]]
-                            */
-				
-			    checkout scm
-			    topicid = "7895"
+                            
                             topicJson = readJSON file: 'topic.json'
 			    ns = "sap/S4HANAOD/" + "${topicid}"
                             topicJson.namespace = ns
