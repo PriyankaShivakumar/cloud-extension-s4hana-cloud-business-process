@@ -2,7 +2,7 @@
 
 cds = require('@sap/cds')
 
-const topicns = require('../../topic.json')
+const topicns = require('./topic')
 
 //const uuidv4 = require('uuid/v4');
 const { v4: uuidv4 } = require('uuid');
