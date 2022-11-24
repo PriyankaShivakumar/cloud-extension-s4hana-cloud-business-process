@@ -180,21 +180,21 @@ pipeline {
 			    georelmessagingJson.emClientId = topicid
                             georelmessagingJson.systemName = systemName
                             writeJSON file: 'georelmessaging.json', json: georelmessagingJson
-                            cat georelmessaging.json
+                            sh "cat georelmessaging.json"
 
                             apiaccessJson = readJSON file: 'apiaccess.json'
 			    communication_arr = "Comm_Arr_${topicid}"
                             apiaccessJson.communicationArrangement.communicationArrangementName = communication_arr
                             apiaccessJson.systemName = systemName
                             writeJSON file: 'apiaccess.json', json: apiaccessJson
-                            cat apiaccess.json
+                            sh "cat apiaccess.json"
 
                             eventmeshJson = readJSON file: 'eventmesh.json'
                             topicnamespace = '"${namespace}/*"' + ", " + "\"sap/S4HANAOD/${topicid}/*\""
 			    eventmeshJson.rules.queueRules.subscribeFilter[] = topicnamespace
                             eventmeshJson.rules.topicRules.subscribeFilter[] = topicnamespace
                             writeJSON file: 'eventmesh.json', json: eventmeshJson
-                            cat eventmesh.json
+                            sh "cat eventmesh.json"
 
                             cloudFoundryCreateService(
                                 cfApiEndpoint: params.apiEndpoint,
@@ -261,7 +261,7 @@ pipeline {
                             topicJson = readJSON file: 'topic.json'
                             topicJson.namespace = "sap/S4HANAOD/${topicid}"
                             writeJSON file: 'topic.json', json: topicJson
-                            cat topic.json
+                            sh "cat topic.json"
         
                             cloudFoundryDeploy(
                                 script: this,
