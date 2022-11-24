@@ -153,12 +153,12 @@ pipeline {
                     dockerExecuteOnKubernetes(script: this, dockerImage: 'docker.wdf.sap.corp:51010/sfext:v3' ){
                         withCredentials([usernamePassword(credentialsId: params.credentialsId, passwordVariable: 'password', usernameVariable: 'username')]) {
                             
-                            build job: 'Georel_RegisterSystem', parameters: [[$class: 'StringParameterValue', name: 'URL', value: cockpitURL],[$class: 'StringParameterValue', name: 'Username', value: username],[$class: 'StringParameterValue', name: 'Password', value: password],[$class: 'StringParameterValue', name: 'hanaCloudTenantURL', value: tenantURL],[$class: 'StringParameterValue', name: 'hanaCloudTenantusername', value: tenantusername],[$class: 'StringParameterValue', name: 'hanaCloudTenantPassword', value: tenantpassword],[$class: 'StringParameterValue', name: 'subAccountName', value: displayNameInBTP]]
+                            build job: 'Georel_RegisterSystem', parameters: [[$class: 'StringParameterValue', name: 'URL', value: cockpitURL],[$class: 'StringParameterValue', name: 'Username', value: username],[$class: 'StringParameterValue', name: 'Password', value: password],[$class: 'StringParameterValue', name: 'hanaCloudTenantURL', value: hanaCloudTenantURL],[$class: 'StringParameterValue', name: 'hanaCloudTenantusername', value: hanaCloudTenantusername],[$class: 'StringParameterValue', name: 'hanaCloudTenantPassword', value: hanaCloudTenantPassword],[$class: 'StringParameterValue', name: 'subAccountName', value: displayNameInBTP]]
                             
                             git branch: 'us10',credentialsId: 'I559299_wdf',url: 'https://github.wdf.sap.corp/CentralAutomationTeam/CloudPortal.git'
-			        	    properties = readProperties file: 'config.properties'
-					        systemName= properties['SystemName']
-					        print systemName
+			    properties = readProperties file: 'config.properties'
+		            systemName= properties['SystemName']
+		            print systemName
 
                             topicid = $(((RANDOM) % 9999))
                             print topicid
@@ -167,23 +167,23 @@ pipeline {
                             
                             sh '''
                                 npm config set unsafe-perm true
-			                    npm rm -g @sap/cds
-			                    npm i -g @sap/cds-dk
-			                    cd georel
+			        npm rm -g @sap/cds
+			        npm i -g @sap/cds-dk
+			        cd georel
                                 npm install
                                 npm install sqlite3
                                 cds deploy --to sqlite
-			                    cd ..
+			        cd ..
                             '''
                             
                             georelmessagingJson = readJSON file: 'georel/georelmessaging.json'
-                            georelmessagingJson.emClientId = topicid
+			    georelmessagingJson.emClientId = topicid
                             georelmessagingJson.systemName = systemName
                             writeJSON file: 'georel/georelmessaging.json', json: georelmessagingJson
                             cat georel/georelmessaging.json
 
                             apiaccessJson = readJSON file: 'georel/apiaccess.json'
-                            apiaccessJson.communicationArrangement.communicationArrangementName = 'Comm_Arr_"+topicid+"'
+                            apiaccessJson.communicationArrangement.communicationArrangementName = "Comm_Arr_${topicid}"
                             apiaccessJson.systemName = systemName
                             writeJSON file: 'georel/apiaccess.json', json: apiaccessJson
                             cat georel/apiaccess.json
@@ -254,7 +254,7 @@ pipeline {
                                 serviceInstanceName: 'georelmessaging'
                             )
 
-                            build job: 'Georel_AddOutboundTopic', parameters: [[$class: 'StringParameterValue', name: 'URL', value: cockpitURL],[$class: 'StringParameterValue', name: 'Username', value: username],[$class: 'StringParameterValue', name: 'Password', value: password],[$class: 'StringParameterValue', name: 'hanaCloudTenantURL', value: tenantURL],[$class: 'StringParameterValue', name: 'hanaCloudTenantusername', value: tenantusername],[$class: 'StringParameterValue', name: 'hanaCloudTenantPassword', value: tenantpassword],[$class: 'StringParameterValue', name: 'topicid', value: topicid]]
+                            build job: 'Georel_AddOutboundTopic', parameters: [[$class: 'StringParameterValue', name: 'URL', value: cockpitURL],[$class: 'StringParameterValue', name: 'Username', value: username],[$class: 'StringParameterValue', name: 'Password', value: password],[$class: 'StringParameterValue', name: 'hanaCloudTenantURL', value: hanaCloudTenantURL],[$class: 'StringParameterValue', name: 'hanaCloudTenantusername', value: hanaCloudTenantusername],[$class: 'StringParameterValue', name: 'hanaCloudTenantPassword', value: hanaCloudTenantPassword],[$class: 'StringParameterValue', name: 'topicid', value: topicid]]
 
                             topicJson = readJSON file: 'georel/srv/topic.json'
                             topicJson.namespace = '"sap/S4HANAOD/${topicid}"'
@@ -299,7 +299,7 @@ pipeline {
                                 returnStdout: true
                             ])
                              
-                            build job: 'Georel_Demoscript', parameters: [[$class: 'StringParameterValue', name: 'URL', value: cockpitURL],[$class: 'StringParameterValue', name: 'Username', value: username],[$class: 'StringParameterValue', name: 'Password', value: password],[$class: 'StringParameterValue', name: 'hanaCloudTenantURL', value: tenantURL],[$class: 'StringParameterValue', name: 'hanaCloudTenantusername', value: tenantusername],[$class: 'StringParameterValue', name: 'hanaCloudTenantPassword', value: tenantpassword],[$class: 'StringParameterValue', name: 'topicid', value: topicid],[$class: 'StringParameterValue', name: 'SystemName', value: systemName],[$class: 'StringParameterValue', name: 'AppURL', value: application_url]]
+                            build job: 'Georel_Demoscript', parameters: [[$class: 'StringParameterValue', name: 'URL', value: cockpitURL],[$class: 'StringParameterValue', name: 'Username', value: username],[$class: 'StringParameterValue', name: 'Password', value: password],[$class: 'StringParameterValue', name: 'hanaCloudTenantURL', value: hanaCloudTenantURL],[$class: 'StringParameterValue', name: 'hanaCloudTenantusername', value: hanaCloudTenantusername],[$class: 'StringParameterValue', name: 'hanaCloudTenantPassword', value: hanaCloudTenantPassword],[$class: 'StringParameterValue', name: 'topicid', value: topicid],[$class: 'StringParameterValue', name: 'SystemName', value: systemName],[$class: 'StringParameterValue', name: 'AppURL', value: application_url]]
 
                         }    
                     }
