@@ -160,7 +160,7 @@ pipeline {
 		            systemName= properties['SystemName']
 		            print systemName
 
-                            topicid = Math.abs(new Random().nextInt() % 9999)
+                            topicid = Math.abs(new Random().nextInt(9000))+1000
                             print topicid
 
                             checkout scm
