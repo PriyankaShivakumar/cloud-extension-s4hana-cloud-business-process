@@ -153,7 +153,7 @@ pipeline {
                     dockerExecuteOnKubernetes(script: this, dockerImage: 'docker.wdf.sap.corp:51010/sfext:v3' ){
                         withCredentials([usernamePassword(credentialsId: params.credentialsId, passwordVariable: 'password', usernameVariable: 'username')]) {
                             
-                            build job: 'Georel_RegisterSystem', parameters: [[$class: 'StringParameterValue', name: 'URL', value: cockpitURL],[$class: 'StringParameterValue', name: 'Username', value: username],[$class: 'StringParameterValue', name: 'Password', value: password],[$class: 'StringParameterValue', name: 'hanaCloudTenantURL', value: hanaCloudTenantURL],[$class: 'StringParameterValue', name: 'hanaCloudTenantusername', value: hanaCloudTenantusername],[$class: 'StringParameterValue', name: 'hanaCloudTenantPassword', value: hanaCloudTenantPassword],[$class: 'StringParameterValue', name: 'subAccountName', value: displayNameInBTP]]
+                           // build job: 'Georel_RegisterSystem', parameters: [[$class: 'StringParameterValue', name: 'URL', value: cockpitURL],[$class: 'StringParameterValue', name: 'Username', value: username],[$class: 'StringParameterValue', name: 'Password', value: password],[$class: 'StringParameterValue', name: 'hanaCloudTenantURL', value: hanaCloudTenantURL],[$class: 'StringParameterValue', name: 'hanaCloudTenantusername', value: hanaCloudTenantusername],[$class: 'StringParameterValue', name: 'hanaCloudTenantPassword', value: hanaCloudTenantPassword],[$class: 'StringParameterValue', name: 'subAccountName', value: displayNameInBTP]]
                             
                             git branch: 'us10',credentialsId: 'I559299_wdf',url: 'https://github.wdf.sap.corp/CentralAutomationTeam/CloudPortal.git'
 			    properties = readProperties file: 'config.properties'
@@ -183,7 +183,7 @@ pipeline {
                             sh "cat georelmessaging.json"
 
                             apiaccessJson = readJSON file: 'apiaccess.json'
-			    communication_arr = "Comm_Arr_${topicid}"
+			    communication_arr = "Comm_Arr_" + "${topicid}"
                             apiaccessJson.communicationArrangement.communicationArrangementName = communication_arr
                             apiaccessJson.systemName = systemName
                             writeJSON file: 'apiaccess.json', json: apiaccessJson
@@ -191,8 +191,8 @@ pipeline {
 
                             eventmeshJson = readJSON file: 'eventmesh.json'
                             topicnamespace = '"${namespace}/*"' + ", " + "\"sap/S4HANAOD/${topicid}/*\""
-			    eventmeshJson.rules.queueRules.subscribeFilter[] = topicnamespace
-                            eventmeshJson.rules.topicRules.subscribeFilter[] = topicnamespace
+			    eventmeshJson.rules.queueRules.subscribeFilter[0] = topicnamespace
+                            eventmeshJson.rules.topicRules.subscribeFilter[0] = topicnamespace
                             writeJSON file: 'eventmesh.json', json: eventmeshJson
                             sh "cat eventmesh.json"
 
