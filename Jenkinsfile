@@ -92,7 +92,7 @@ pipeline {
                                 btpCredentialsId: params.credentialsId,
                                 btpGlobalAccountId: params.btpGlobalAccountId,
                                 btpSubdomainName: params.btpSubdomainName, 
-                                btpRegion: params.cfEnvRegion,
+                                btpRegion: params.btpRegion,
                                 btpLandscape: params.btpLandscape
                             )
                         } catch(e){
@@ -350,14 +350,14 @@ pipeline {
                             btpCredentialsId: params.credentialsId,
                             btpGlobalAccountId: params.btpGlobalAccountId,
                             btpSubdomainName: params.btpSubdomainName, 
-                            btpRegion: params.cfEnvRegion,
+                            btpRegion: params.btpRegion,
                             btpLandscape: params.btpLandscape
                         )
                         afterDeleteStatus = checkSubaccount(
                             btpCredentialsId: params.credentialsId,
                             btpGlobalAccountId: params.btpGlobalAccountId,
                             btpSubdomainName: params.btpSubdomainName, 
-                            btpRegion: params.cfEnvRegion,
+                            btpRegion: params.btpRegion,
                             btpLandscape: params.btpLandscape
                         )
                         assert afterDeleteStatus == false
