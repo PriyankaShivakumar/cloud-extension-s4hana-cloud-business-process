@@ -328,6 +328,9 @@ pipeline {
                                 script: this
                             )
                         }
+			    
+			build job: 'Georel_RemoveSystem', parameters: [[$class: 'StringParameterValue', name: 'URL', value: cockpitURL],[$class: 'StringParameterValue', name: 'Username', value: username],[$class: 'StringParameterValue', name: 'Password', value: password],[$class: 'StringParameterValue', name: 'SystemName', value: systemName]]
+
                         deleteSubaccount(
                             btpCredentialsId: params.credentialsId,
                             btpGlobalAccountId: params.btpGlobalAccountId,
@@ -343,9 +346,6 @@ pipeline {
                             btpLandscape: params.btpLandscape
                         )
                         assert afterDeleteStatus == false
-			    
-			build job: 'Georel_RemoveSystem', parameters: [[$class: 'StringParameterValue', name: 'URL', value: cockpitURL],[$class: 'StringParameterValue', name: 'Username', value: username],[$class: 'StringParameterValue', name: 'Password', value: password],[$class: 'StringParameterValue', name: 'SystemName', value: systemName]]
-
                     } catch(e){
                         echo 'Cleanup failed'
                     }
