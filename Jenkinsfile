@@ -321,18 +321,22 @@ pipeline {
             }
             steps {
                 script {
-                    retry (5) {
-                        cloudFoundryDeleteSpace(
-                            cfApiEndpoint: params.apiEndpoint,
-                            cfOrg: params.cfOrgName,
-                            cfSpace: params.cfSpaceName,
-                            cfCredentialsId: params.credentialsId,
-                            script: this
-                        )
+                    dockerExecuteOnKubernetes(script: this, dockerImage: 'docker.wdf.sap.corp:51010/sfext:v3' ){
+                        withCredentials([usernamePassword(credentialsId: params.credentialsId, passwordVariable: 'password', usernameVariable: 'username')]) {
+               
+                            retry (5) {
+                                cloudFoundryDeleteSpace(
+                                    cfApiEndpoint: params.apiEndpoint,
+                                    cfOrg: params.cfOrgName,
+                                    cfSpace: params.cfSpaceName,
+                                    cfCredentialsId: params.credentialsId,
+                                    script: this
+                                )
+                            }
+
+                            build job: 'Georel_RemoveSystem', parameters: [[$class: 'StringParameterValue', name: 'URL', value: cockpitURL],[$class: 'StringParameterValue', name: 'Username', value: username],[$class: 'StringParameterValue', name: 'Password', value: password],[$class: 'StringParameterValue', name: 'SystemName', value: systemName]]
+                        }
                     }
-
-                    build job: 'Georel_RemoveSystem', parameters: [[$class: 'StringParameterValue', name: 'URL', value: cockpitURL],[$class: 'StringParameterValue', name: 'Username', value: username],[$class: 'StringParameterValue', name: 'Password', value: password],[$class: 'StringParameterValue', name: 'SystemName', value: systemName]]
-
                 }
             }
         }
