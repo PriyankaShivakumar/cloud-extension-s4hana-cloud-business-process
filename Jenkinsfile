@@ -174,9 +174,6 @@ pipeline {
                                 npm install sqlite3
                                 cds deploy --to sqlite
 			        cd ..
-				curl -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 --output jq
-                                chmod +x jq
-                                mv jq /usr/local/bin/jq
                             '''
                             
                             georelmessagingJson = readJSON file: 'georelmessaging.json'
@@ -291,6 +288,10 @@ pipeline {
                         withCredentials([usernamePassword(credentialsId: params.credentialsId, passwordVariable: 'password', usernameVariable: 'username')]) {
                             sh "cf login -a $apiEndpoint -u $username -p $password -o $cfOrgName -s $cfSpaceName"  
                             sh '''
+			        curl -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 --output jq
+                                chmod +x jq
+                                mv jq /usr/local/bin/jq
+				
                                 appId=`cf app geoe2e --guid`
                                 `cf curl /v2/apps/$appId/env > ab.txt`
                             '''
