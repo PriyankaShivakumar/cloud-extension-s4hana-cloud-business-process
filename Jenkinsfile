@@ -4,10 +4,10 @@
 pipeline {
     agent { label 'master' }
     parameters{
-        string(name: 'credentialsId', defaultValue: 'pusercf1',
+        string(name: 'credentialsId', defaultValue: 'pusercf',
             description: 'The user with which we can access BTP Landscape and CF')
 
-        string(name: 'btpGlobalAccountId', defaultValue: 'btp-last-mile',
+        string(name: 'btpGlobalAccountId', defaultValue: '93951304-9109-44bc-ac3f-53c3ac8b309b',
             description: 'BTP Global AccountId')
 
         string(name: 'btpSubdomainName', defaultValue: 'GeoAuto',
@@ -43,7 +43,7 @@ pipeline {
         string(name: 'hanaCloudTenantPassword', defaultValue: 'Welcome@20',
             description: 'Hana Cloud Tenant Password')
 
-        string(name: 'cockpitURL', defaultValue: 'https://cockpit.eu10.hana.ondemand.com/cockpit/#/globalaccount/8b38a5f0-0f75-45ce-9f1a-f6f1a4aee18a/accountModel',
+        string(name: 'cockpitURL', defaultValue: 'https://cockpit.eu10.hana.ondemand.com/cockpit/#/globalaccount/93951304-9109-44bc-ac3f-53c3ac8b309b/accountModel',
             description: 'Cockpit URL')
         
         // Stages enabled by default
