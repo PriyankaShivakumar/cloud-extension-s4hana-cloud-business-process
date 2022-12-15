@@ -53,6 +53,8 @@ pipeline {
             description: 'Deploy the applications, Create destinations and assign permissions in BTP')
         booleanParam(name: 'runTests', defaultValue: true,
             description: 'Execute the Mocha tests to test the application')
+        booleanParam(name: 'removeSystem', defaultValue: true,
+            description: 'Remove the system registration in BTP')
         booleanParam(name: 'deleteSubaccount', defaultValue: true,
             description: 'Delete Subaccount in BTP')
     }
@@ -313,24 +315,33 @@ pipeline {
                 }
             }
         }
+        stage('Remove System') {
+            when {
+                expression { params.removeSystem == true }
+            }
+            steps {
+                script {
+                    retry (5) {
+                        cloudFoundryDeleteSpace(
+                            cfApiEndpoint: params.apiEndpoint,
+                            cfOrg: params.cfOrgName,
+                            cfSpace: params.cfSpaceName,
+                            cfCredentialsId: params.credentialsId,
+                            script: this
+                        )
+                    }
+
+                    build job: 'Georel_RemoveSystem', parameters: [[$class: 'StringParameterValue', name: 'URL', value: cockpitURL],[$class: 'StringParameterValue', name: 'Username', value: username],[$class: 'StringParameterValue', name: 'Password', value: password],[$class: 'StringParameterValue', name: 'SystemName', value: systemName]]
+
+                }
+            }
+        }
     }
     post {
         always {
             script {
                 if (params.deleteSubaccount == true) {
 		    try {
-                        retry (5) {
-                            cloudFoundryDeleteSpace(
-                                cfApiEndpoint: params.apiEndpoint,
-                                cfOrg: params.cfOrgName,
-                                cfSpace: params.cfSpaceName,
-                                cfCredentialsId: params.credentialsId,
-                                script: this
-                            )
-                        }
-			    
-			build job: 'Georel_RemoveSystem', parameters: [[$class: 'StringParameterValue', name: 'URL', value: cockpitURL],[$class: 'StringParameterValue', name: 'Username', value: username],[$class: 'StringParameterValue', name: 'Password', value: password],[$class: 'StringParameterValue', name: 'SystemName', value: systemName]]
-
                         deleteSubaccount(
                             btpCredentialsId: params.credentialsId,
                             btpGlobalAccountId: params.btpGlobalAccountId,
