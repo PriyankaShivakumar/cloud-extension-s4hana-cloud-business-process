@@ -17,7 +17,7 @@
     "@sap/xsenv": "latest",
     "express": "^4.17.1",
     "passport": "^0.6.0",
-    "sqlite3": "^5.1.2",
+    "sqlite3": "^5.1.4",
     "uuid": "^8.3.2"
   },
   "scripts": {
@@ -33,7 +33,7 @@
       "db": {
         "kind": "sqlite",
         "credentials": {
-          "database": "sqlite.db"
+          "database": "db.sqlite"
         }
       },
       "messaging": {
