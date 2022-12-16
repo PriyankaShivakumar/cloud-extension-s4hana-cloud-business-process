@@ -308,7 +308,7 @@ pipeline {
                                 returnStdout: true
                             ])
                              
-                            build job: 'Georel_Demoscript', parameters: [[$class: 'StringParameterValue', name: 'URL', value: cockpitURL],[$class: 'StringParameterValue', name: 'Username', value: username],[$class: 'StringParameterValue', name: 'Password', value: password],[$class: 'StringParameterValue', name: 'hanaCloudTenantURL', value: hanaCloudTenantURL],[$class: 'StringParameterValue', name: 'hanaCloudTenantusername', value: hanaCloudTenantusername],[$class: 'StringParameterValue', name: 'hanaCloudTenantPassword', value: hanaCloudTenantPassword],[$class: 'StringParameterValue', name: 'topicid', value: topicid],[$class: 'StringParameterValue', name: 'SystemName', value: systemName],[$class: 'StringParameterValue', name: 'AppURL', value: application_url]]
+                            build job: 'Georel_Demoscript', parameters: [[$class: 'StringParameterValue', name: 'URL', value: cockpitURL],[$class: 'StringParameterValue', name: 'Username', value: username],[$class: 'StringParameterValue', name: 'Password', value: password],[$class: 'StringParameterValue', name: 'hanaCloudTenantURL', value: hanaCloudTenantURL],[$class: 'StringParameterValue', name: 'hanaCloudTenantusername', value: hanaCloudTenantusername],[$class: 'StringParameterValue', name: 'hanaCloudTenantPassword', value: hanaCloudTenantPassword],[$class: 'StringParameterValue', name: 'SystemName', value: systemName],[$class: 'StringParameterValue', name: 'AppURL', value: application_url]]
 
                         }    
                     }
@@ -323,7 +323,9 @@ pipeline {
                 script {
                     dockerExecuteOnKubernetes(script: this, dockerImage: 'docker.wdf.sap.corp:51010/sfext:v3' ){
                         withCredentials([usernamePassword(credentialsId: params.credentialsId, passwordVariable: 'password', usernameVariable: 'username')]) {
-               
+               		    
+			    build job: 'Georel_CommunicationArr', parameters: [[$class: 'StringParameterValue', name: 'URL', value: cockpitURL],[$class: 'StringParameterValue', name: 'Username', value: username],[$class: 'StringParameterValue', name: 'Password', value: password],[$class: 'StringParameterValue', name: 'hanaCloudTenantURL', value: hanaCloudTenantURL],[$class: 'StringParameterValue', name: 'hanaCloudTenantusername', value: hanaCloudTenantusername],[$class: 'StringParameterValue', name: 'hanaCloudTenantPassword', value: hanaCloudTenantPassword],[$class: 'StringParameterValue', name: 'topicid', value: topicid]]
+
                             retry (5) {
                                 cloudFoundryDeleteSpace(
                                     cfApiEndpoint: params.apiEndpoint,
@@ -346,6 +348,15 @@ pipeline {
             script {
                 if (params.deleteSubaccount == true) {
 		    try {
+			retry (5) {
+                            cloudFoundryDeleteSpace(
+                                cfApiEndpoint: params.apiEndpoint,
+                                cfOrg: params.cfOrgName,
+                                cfSpace: params.cfSpaceName,
+                                cfCredentialsId: params.credentialsId,
+                                script: this
+                            )
+                        }
                         deleteSubaccount(
                             btpCredentialsId: params.credentialsId,
                             btpGlobalAccountId: params.btpGlobalAccountId,
